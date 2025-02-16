@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>浪漫时刻</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* 开场特效 */
+        .curtain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .heart-loader {
+            width: 100px;
+            height: 100px;
+            background: #ff1493;
+            position: relative;
+            transform: rotate(45deg);
+            animation: pulse 1.5s infinite;
+        }
+
+        .heart-loader::before,
+        .heart-loader::after {
+            content: '';
+            width: 100px;
+            height: 100px;
+            background: #ff1493;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart-loader::before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart-loader::after {
+            top: 0;
+            left: -50px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: rotate(45deg) scale(1); }
+            50% { transform: rotate(45deg) scale(1.2); }
+        }
+
+        /* 浪漫界面 */
+        .romantic-scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: none;
+        }
+
+        /* 星星 */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* 爱心 */
+        .heart {
+            position: absolute;
+            color: #ff1493;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 花瓣 */
+        .petal {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, #ffb6c1, #ff69b4);
+            clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 80% 60%, 50% 100%, 20% 60%, 0% 35%, 20% 10%);
+            animation: petalFall linear forwards, petalFloat ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes petalFall {
+            to {
+                transform: translateY(110vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes petalFloat {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(30px); }
+        }
+
+        /* 鼠标爱心 */
+        .mouse-heart {
+            position: absolute;
+            color: #ff1493;
+            font-size: 24px;
+            pointer-events: none;
+            animation: heartFloat 1s ease-out forwards;
+            opacity: 0.8;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -150%) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* 流星 */
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transform: rotate(-45deg); /* 调整角度 */
+            z-index: 1;
+        }
+
+        @keyframes meteorFall {
+            0% {
+                opacity: 1;
+                transform: translateX(100vw) translateY(-50vh) rotate(-45deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-100vw) translateY(100vh) rotate(-45deg);
+            }
+        }
+
+        /* 流星尾迹 */
+        .meteor::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,1));
+            transform: translateX(-100%) rotate(180deg);
+        }
+        /* 爱你文字效果 */
+        .love-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: '楷体', cursive;
+            font-size: 4em;
+            text-shadow: 0 0 20px #ff1493;
+            animation: loveTwinkle 2s ease-in-out infinite;
+            z-index: 2;
+            background: linear-gradient(45deg, #ff69b4, #ff1493, #ffb6c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.9;
+        }
+
+        @keyframes loveTwinkle {
+            0%, 100% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1);
+                filter: drop-shadow(0 0 10px #ff1493);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+                filter: drop-shadow(0 0 30px #ff69b4);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 开场特效 -->
+    <div class="curtain">
+        <div class="heart-loader"></div>
+    </div>
+ <div class="love-text">小狼人</div>
+    <!-- 浪漫界面 -->
+    <div class="romantic-scene">
+
+        <!-- 内容由JavaScript动态生成 -->
+    </div>
+
+    <script>
+        window.onload = () => {
+            // 开场特效
+            const curtain = document.querySelector('.curtain');
+            const scene = document.querySelector('.romantic-scene');
+
+            // 添加流星效果
+            function createMeteor() {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+
+                // 随机位置和速度
+                meteor.style.top = Math.random() * 50 + '%'; // 从上半部分开始
+                meteor.style.right = Math.random() * 100 + '%'; // 从右侧开始
+                meteor.style.animation = `meteorFall ${Math.random() * 1 + 0.5}s linear`;
+
+                // 随机大小和亮度
+                const size = Math.random() * 3 + 1;
+                meteor.style.width = size + 'px';
+                meteor.style.height = size + 'px';
+                meteor.style.boxShadow = `0 0 ${size * 5}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.5})`;
+
+                document.body.appendChild(meteor);
+
+                // 自动移除
+                setTimeout(() => {
+                    meteor.remove();
+                }, 2000);
+            }
+
+            // 流星雨控制器
+            function startMeteorShower() {
+                // 基础流星
+                setInterval(createMeteor, 100);
+
+                // 随机爆发流星群
+                setInterval(() => {
+                    if (Math.random() > 0.3) {
+                        const count = Math.floor(Math.random() * 5) + 3;
+                        for (let i = 0; i < count; i++) {
+                            setTimeout(createMeteor, Math.random() * 300);
+                        }
+                    }
+                }, 2000);
+            }
+
+            startMeteorShower();
+
+            // 添加鼠标爱心轨迹
+            document.addEventListener('mousemove', (e) => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'mouse-heart';
+                heart.style.left = e.pageX + 'px';
+                heart.style.top = e.pageY + 'px';
+
+                // 随机大小和颜色
+                heart.style.fontSize = Math.random() * 24 + 16 + 'px';
+                heart.style.color = `rgba(255, ${Math.random() * 105 + 20}, ${Math.random() * 180 + 75}, 0.8)`;
+
+                document.body.appendChild(heart);
+
+                // 自动移除
+                setTimeout(() => {
+                    heart.remove();
+                }, 1000);
+            });
+
+            setTimeout(() => {
+                curtain.style.opacity = '0';
+                setTimeout(() => {
+                    curtain.style.display = 'none';
+                    scene.style.display = 'block';
+                    initRomanticScene();
+                }, 1000);
+            }, 3000);
+
+            // 初始化浪漫场景
+            function initRomanticScene() {
+                // 创建星星
+                for (let i = 0; i < 200; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 1.5 + 's';
+                    scene.appendChild(star);
+                }
+
+                // 创建爱心雨
+                setInterval(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.className = 'heart';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                    heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                    scene.appendChild(heart);
+                    setTimeout(() => heart.remove(), 5000);
+                }, 300);
+
+                // 创建花瓣雨
+                const colors = ['#ffb6c1', '#ff69b4', '#ff1493', '#fff0f5'];
+                setInterval(() => {
+                    const petal = document.createElement('div');
+                    petal.className = 'petal';
+                    petal.style.left = Math.random() * 100 + '%';
+                    petal.style.animationDuration = Math.random() * 3 + 5 + 's';
+                    petal.style.background = `linear-gradient(45deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
+                    petal.style.animation = `petalFall ${Math.random() * 3 + 5}s linear infinite, petalFloat ${Math.random() * 2 + 3}s ease-in-out infinite`;
+                    scene.appendChild(petal);
+                    setTimeout(() => petal.remove(), 8000);
+                }, 200);
+            }
+        };
+    </script>
+</body>
+</html>
